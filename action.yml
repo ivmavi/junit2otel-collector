@@ -23,51 +23,51 @@ runs:
     - name: Download JUnit Artifact
       id: download-report
       uses: actions/github-script@v6.3.1
-        with:
-          script: |
-            var owner = '${{ inputs.owner }}'
-            var repo = '${{ inputs.repo }}'
-            var workflowRunId = '${{ inputs.workflowRunId }}
-            var reportName = '${{ inputs.reportName }}'
+      with:
+        script: |
+          var owner = '${{ inputs.owner }}'
+          var repo = '${{ inputs.repo }}'
+          var workflowRunId = '${{ inputs.workflowRunId }}
+          var reportName = '${{ inputs.reportName }}'
 
-            console.log('::debug::Download artifacts - ' + 
-              'owner: ' + owner + 
-              'repo: ' + repo +
-              'reportName' + reportName +
-              'workflowRunId' + workflowRunId +
-              'reportName' + reportName)
+          console.log('::debug::Download artifacts - ' + 
+            'owner: ' + owner + 
+            'repo: ' + repo +
+            'reportName' + reportName +
+            'workflowRunId' + workflowRunId +
+            'reportName' + reportName)
 
-            var artifacts = await github.actions.listWorkflowRunArtifacts({
-               owner: owner ,
-               repo: repo,
-               run_id: workflowRunId,
-            });
-            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == reportName
-            })[0];
+          var artifacts = await github.actions.listWorkflowRunArtifacts({
+              owner: owner ,
+              repo: repo,
+              run_id: workflowRunId,
+          });
+          var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+            return artifact.name == reportName
+          })[0];
 
-            console.log('::debug::Downloading : ' + matchArtifact)
-            var download = await github.actions.downloadArtifact({
-               owner: owner,
-               repo: repo,
-               artifact_id: matchArtifact.id,
-               archive_format: 'zip',
-            });
+          console.log('::debug::Downloading : ' + matchArtifact)
+          var download = await github.actions.downloadArtifact({
+              owner: owner,
+              repo: repo,
+              artifact_id: matchArtifact.id,
+              archive_format: 'zip',
+          });
 
-            var fs = require('fs');
-            var os = require('os');
-            var path = require('path');
+          var fs = require('fs');
+          var os = require('os');
+          var path = require('path');
 
-            var tmpDir = os.tmpdir();
-            mkdtemp(tmpDir + sep, (err, directory) => {
-              if (err) throw err;
-              console.log('::debug::Temp directory : ' + directory);
-              var storedFile = directory + sep + 'junit-report.zip'
-              console.log('::debug::Storing file ' + storedFile)
-              fs.writeFileSync(storedFile, Buffer.from(download.data));
-              console.log('::set-output name=tempdir::' + directory);
-              console.log('::set-output name=report-file::' + storedFile);
-            });
+          var tmpDir = os.tmpdir();
+          mkdtemp(tmpDir + sep, (err, directory) => {
+            if (err) throw err;
+            console.log('::debug::Temp directory : ' + directory);
+            var storedFile = directory + sep + 'junit-report.zip'
+            console.log('::debug::Storing file ' + storedFile)
+            fs.writeFileSync(storedFile, Buffer.from(download.data));
+            console.log('::set-output name=tempdir::' + directory);
+            console.log('::set-output name=report-file::' + storedFile);
+          });
     - name: Uncompress files
       # bash is in all runners types
       shell: bash 
