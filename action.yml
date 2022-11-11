@@ -5,7 +5,7 @@ inputs:
     description: Name of the JUnit archived file. If there are multiple JUnit files it should be a `.zip` file.
     required: false
     default: junit-report.xml
-  workflowRunId: 
+  workflowRunId:
     description: Id of the workflow run where the JUnit files are archived.
     required: false
     default: ${{ github.event.workflow_run.id }}
@@ -25,54 +25,19 @@ runs:
       uses: actions/github-script@v6.3.1
       with:
         script: |
-          var owner = '${{ inputs.owner }}'
-          var repo = '${{ inputs.repo }}'
-          var workflowRunId = '${{ inputs.workflowRunId }}
-          var reportName = '${{ inputs.reportName }}'
-
-          console.log('::debug::Download artifacts - ' + 
-            'owner: ' + owner + 
-            'repo: ' + repo +
-            'reportName' + reportName +
-            'workflowRunId' + workflowRunId +
-            'reportName' + reportName)
-
-          var artifacts = await github.actions.listWorkflowRunArtifacts({
-              owner: owner ,
-              repo: repo,
-              run_id: workflowRunId,
-          });
-          var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-            return artifact.name == reportName
-          })[0];
-
-          console.log('::debug::Downloading : ' + matchArtifact)
-          var download = await github.actions.downloadArtifact({
-              owner: owner,
-              repo: repo,
-              artifact_id: matchArtifact.id,
-              archive_format: 'zip',
-          });
-
-          var fs = require('fs');
-          var os = require('os');
-          var path = require('path');
-
-          var tmpDir = os.tmpdir();
-          mkdtemp(tmpDir + sep, (err, directory) => {
-            if (err) throw err;
-            console.log('::debug::Temp directory : ' + directory);
-            var storedFile = directory + sep + 'junit-report.zip'
-            console.log('::debug::Storing file ' + storedFile)
-            fs.writeFileSync(storedFile, Buffer.from(download.data));
-            console.log('::set-output name=tempdir::' + directory);
-            console.log('::set-output name=report-file::' + storedFile);
-          });
+          const repo = {
+            owner: '${{ inputs.owner }}',
+            repo: '${{ inputs.repo }}',
+            workflowRunId: '${{ inputs.workflowRunId }},
+            reportName: '${{ inputs.reportName }}'
+          }
+          const script = require('./script.js')
+          script.downloadReport(repo)
     - name: Uncompress files
       # bash is in all runners types
-      shell: bash 
+      shell: bash
       # 7zip is in all runners types.
-      run: | 
+      run: |
         7z x -o ${{ steps.download-report.outputs.report-file }}
     - name: Process JUnit files
       shell: bash

@@ -1,0 +1,36 @@
+{
+  "name": "junit2otel-collector",
+  "version": "1.0.0",
+  "description": "Collect GitHub Actions JUnit resutls and sent them to an OpenTelemetry service",
+  "main": "script.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivmavi/junit2otel-collector.git"
+  },
+  "keywords": [
+    "junit",
+    "otel",
+    "opentelemetry",
+    "test",
+    "github",
+    "actions"
+  ],
+  "author": "Kuisathaverat",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ivmavi/junit2otel-collector/issues"
+  },
+  "homepage": "https://github.com/ivmavi/junit2otel-collector#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/io": "^1.1.2"
+  },
+  "devDependencies": {
+    "@actions/github": "^5.1.1",
+    "jest": "^29.3.1"
+  }
+}

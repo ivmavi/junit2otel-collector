@@ -1,0 +1,40 @@
+---
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # use pre-commit to run the checks
+      - uses: pre-commit/action@v2.0.3
+        with:
+          extra_args: --all-files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          cache: npm
+      - run: npm ci
+      - id: test-execution
+        run: npm test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ivmavi/junit2otel-collector@{{ github.sha }}
+        with:
+          reportName: ${{ steps.test-execution.outputs.reportName }}
+          workflowRunId: ${{ steps.test-execution.outputs.workflowRunId }}
+          owner: ${{ steps.test-execution.outputs.owner }}
+          repo: ${{ steps.test-execution.outputs.repo }}
