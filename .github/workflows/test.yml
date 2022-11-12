@@ -29,6 +29,12 @@ jobs:
         run: npm test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results.xml
+          path: junit.xml
       - uses: ./
         with:
           reportName: ${{ steps.test-execution.outputs.reportName }}

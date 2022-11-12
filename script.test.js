@@ -8,9 +8,9 @@ test("downloadReport", async () => {
 
   const octokit = github.getOctokit(GITHUB_TOKEN);
   owner = "ivmavi";
-  repo = "tests-python";
+  repo = "junit2otel-collector";
   workflow_id = ".github/workflows/test.yml";
-  reportName = "junit-test-results.xml";
+  reportName = "test-results.xml";
 
   const runs = await octokit.rest.actions.listWorkflowRuns({
     owner,
