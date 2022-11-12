@@ -29,7 +29,7 @@ jobs:
         run: npm test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: ivmavi/junit2otel-collector@${{ github.sha }}
+      - uses: ./
         with:
           reportName: ${{ steps.test-execution.outputs.reportName }}
           workflowRunId: ${{ steps.test-execution.outputs.workflowRunId }}
