@@ -31,8 +31,12 @@ runs:
             repo: '${{ inputs.repo }}',
             workflowRunId: '${{ inputs.workflowRunId }}',
             reportName: '${{ inputs.reportName }}'
-          }
-          core.info(github)
+          };
+          github.rest.issues.get({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          });
           /*
           var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
             owner: repo.owner,
@@ -41,8 +45,8 @@ runs:
           });
           */
 
-          //const script = require('./script.js')
-          //script.downloadReport(repo)
+          //const script = require('./script.js');
+          //script.downloadReport(repo);
     - name: Uncompress files
       # bash is in all runners types
       shell: bash
