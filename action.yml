@@ -1,5 +1,5 @@
 name: junit2otel-collector
-desription: GitHub Action to process and send to a OpenTelemetry service a JUnit result file stored as artifact on a workflow run.
+description: GitHub Action to process and send to a OpenTelemetry service a JUnit result file stored as artifact on a workflow run.
 inputs:
   reportName:
     description: Name of the JUnit archived file. If there are multiple JUnit files it should be a `.zip` file.
