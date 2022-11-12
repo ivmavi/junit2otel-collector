@@ -35,8 +35,7 @@ runs:
             workflowRunId: '${{ inputs.workflowRunId }}',
             reportName: '${{ inputs.reportName }}'
           };
-          core.info('foo')
-          core.info(script.downloadReport(repo));
+          await script.downloadReport(repo);
     - name: Uncompress files
       # bash is in all runners types
       shell: bash
