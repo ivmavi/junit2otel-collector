@@ -35,6 +35,10 @@ runs:
             workflowRunId: '${{ inputs.workflowRunId }}',
             reportName: '${{ inputs.reportName }}'
           };
+          core.setOutput("owner", owner);
+          core.setOutput("repo", repo);
+          core.setOutput("workflowRunId", workflowRunId);
+          core.setOutput("reportName", reportName);
           await script.downloadReport(repo);
     - name: Uncompress files
       # bash is in all runners types
