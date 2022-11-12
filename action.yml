@@ -22,7 +22,7 @@ runs:
   steps:
     - name: Download JUnit Artifact
       id: download-report
-      uses: actions/github-script@v6.3.1
+      uses: actions/github-script@v6
       with:
         debug: true
         script: |
