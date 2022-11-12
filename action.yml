@@ -29,7 +29,7 @@ runs:
           const repo = {
             owner: '${{ inputs.owner }}',
             repo: '${{ inputs.repo }}',
-            workflowRunId: '${{ inputs.workflowRunId }},
+            workflowRunId: '${{ inputs.workflowRunId }}',
             reportName: '${{ inputs.reportName }}'
           }
           const script = require('./script.js')
