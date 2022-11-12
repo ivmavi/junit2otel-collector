@@ -1,8 +1,7 @@
 const github = require("@actions/github");
 const script = require("./script");
-const code = require("@actions/core");
-const { coerce } = require("yargs");
-const debug = code.debug;
+const core = require("@actions/core");
+const debug = core.debug;
 
 test("downloadReport", async () => {
   const { GITHUB_TOKEN } = process.env;
