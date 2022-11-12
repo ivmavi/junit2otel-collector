@@ -1,21 +1,20 @@
-const core = require("@actions/core");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-
-const debug = core.debug;
-const setOutput = core.setOutput;
-const setFailed = core.setFailed;
 const sep = path.sep;
 
 const downloadReport = async ({
   github,
+  core,
   owner,
   repo,
   workflowRunId,
   reportName,
 }) => {
   try {
+    const debug = core.debug;
+    const setOutput = core.setOutput;
+    const setFailed = core.setFailed;
     debug(
       "Download artifacts - " +
         "owner: " +

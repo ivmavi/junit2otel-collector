@@ -22,6 +22,7 @@ test("downloadReport", async () => {
 
   report = {
     github: octokit,
+    core: core,
     owner,
     repo,
     workflowRunId,

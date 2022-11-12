@@ -26,21 +26,15 @@ runs:
       with:
         debug: true
         script: |
+          const script = require('./script.js');
           const repo = {
             github: github,
+            core: core,
             owner: '${{ inputs.owner }}',
             repo: '${{ inputs.repo }}',
             workflowRunId: '${{ inputs.workflowRunId }}',
             reportName: '${{ inputs.reportName }}'
           };
-
-          var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-            owner: repo.owner,
-            repo: repo.repo,
-            run_id: repo.workflowRunId,
-          });
-
-          const script = require('./script.js');
           script.downloadReport(repo);
     - name: Uncompress files
       # bash is in all runners types
