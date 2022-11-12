@@ -6,8 +6,6 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
 
 permissions:
   contents: read
@@ -17,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # use pre-commit to run the checks
       - uses: pre-commit/action@v2.0.3
         with:
           extra_args: --all-files
