@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Collect GitHub Actions JUnit resutls and sent them to an OpenTelemetry service",
   "main": "script.js",
-  "type": "module",
   "scripts": {
     "test": "jest --ci --testResultsProcessor='jest-junit'"
   },
