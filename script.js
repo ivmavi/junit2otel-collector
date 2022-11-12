@@ -11,8 +11,8 @@ const sep = path.sep;
 const downloadReport = async ({github, owner, repo, workflowRunId, reportName}) => {
   try {
 
-    debug('Download artifacts - ' + 
-    'owner: ' + owner + 
+    debug('Download artifacts - ' +
+    'owner: ' + owner +
     ', repo: ' + repo +
     ', reportName' + reportName +
     ', workflowRunId' + workflowRunId +
