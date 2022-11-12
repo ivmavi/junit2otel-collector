@@ -41,7 +41,7 @@ runs:
         7z x -o ${{ steps.download-report.outputs.report-file }}
     - name: Process JUnit files
       shell: bash
-      run:
+      run: |
         for report in $(find ${{ steps.download-report.outputs.tempdir }} -name '*.xml');
         do
           echo "Procesing ${report}"
