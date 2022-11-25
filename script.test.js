@@ -1,37 +1,46 @@
 const github = require("@actions/github");
-const script = require("./script");
+const junitReport = require("./script");
 const core = require("@actions/core");
+const { expect, test } = require("@jest/globals");
+const fs = require("fs");
+const path = require("path");
 
-test("downloadReport", async () => {
+test("download", async () => {
   const { GITHUB_TOKEN } = process.env;
-
-  const octokit = github.getOctokit(GITHUB_TOKEN);
+  const octokit = new github.getOctokit(GITHUB_TOKEN);
   var owner = "ivmavi";
   var repo = "junit2otel-collector";
   var workflow_id = ".github/workflows/test.yml";
   var reportName = "test-results.xml";
 
-  const runs = await octokit.rest.actions.listWorkflowRuns({
-    owner,
-    repo,
-    workflow_id,
-  });
+  const runs = await octokit.rest.actions
+    .listWorkflowRuns({
+      owner,
+      repo,
+      workflow_id,
+    })
+    .catch(core.debug);
 
   var workflowRunId = runs.data.workflow_runs[0].id;
 
   var report = {
     github: octokit,
-    core: core,
-    owner,
-    repo,
-    workflowRunId,
-    reportName,
+    owner: owner,
+    repo: repo,
+    workflowRunId: workflowRunId,
+    reportName: reportName,
   };
 
-  core.setOutput("owner", owner);
-  core.setOutput("repo", repo);
-  core.setOutput("workflowRunId", workflowRunId);
-  core.setOutput("reportName", reportName);
+  core.debug("owner", owner);
+  core.debug("repo", repo);
+  core.debug("workflowRunId", workflowRunId);
+  core.debug("reportName", reportName);
 
-  await script.downloadReport(report);
+  var { directory, storedFile } = await junitReport.download(report);
+  expect(fs.existsSync(path.join(directory, storedFile))).toBe(true);
+});
+
+test("checkToken", async () => {
+  const { GITHUB_TOKEN } = process.env;
+  expect(await junitReport.checkToken(GITHUB_TOKEN, ["workflow"])).toBe(true);
 });
