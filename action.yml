@@ -17,42 +17,41 @@ inputs:
     description: The repository we want ro process.
     required: false
     default: ${{ github.event.workflow_run.head_repository.name }}
+  token:
+    description: Token to access the repository.
+    required: false
+    default: ${{ github.token }}
 runs:
-  using: "composite"
-  steps:
-    - name: Download JUnit Artifact
-      id: download-report
-      uses: actions/github-script@v6.3.1
-      with:
-        debug: true
-        script: |
-          const repo = {
-            owner: '${{ inputs.owner }}',
-            repo: '${{ inputs.repo }}',
-            workflowRunId: '${{ inputs.workflowRunId }}',
-            reportName: '${{ inputs.reportName }}'
-          }
-          core.info(github)
-          /*
-          var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-            owner: repo.owner,
-            repo: repo.repo,
-            run_id: repo.workflowRunId,
-          });
-          */
-
-          //const script = require('./script.js')
-          //script.downloadReport(repo)
-    - name: Uncompress files
-      # bash is in all runners types
-      shell: bash
-      # 7zip is in all runners types.
-      run: |
-        7z x -o ${{ steps.download-report.outputs.report-file }}
-    - name: Process JUnit files
-      shell: bash
-      run: |
-        for report in $(find ${{ steps.download-report.outputs.tempdir }} -name '*.xml');
-        do
-          echo "Procesing ${report}"
-        done
+  using: "node16"
+  main: "dist/index.js"
+  # using: "composite"
+  # steps:
+  #   - name: Download JUnit Artifact
+  #     id: download-report
+  #     uses: actions/github-script@v6
+  #     with:
+  #       debug: true
+  #       script: |
+  #         const script = require('./script.js');
+  #         const repo = {
+  #           github: github,
+  #           core: core,
+  #           owner: '${{ inputs.owner }}',
+  #           repo: '${{ inputs.repo }}',
+  #           workflowRunId: '${{ inputs.workflowRunId }}',
+  #           reportName: '${{ inputs.reportName }}'
+  #         };
+  #         await script.downloadReport(repo);
+  #   - name: Uncompress files
+  #     # bash is in all runners types
+  #     shell: bash
+  #     # 7zip is in all runners types.
+  #     run: |
+  #       7z x -o ${{ steps.download-report.outputs.report-file }}
+  #   - name: Process JUnit files
+  #     shell: bash
+  #     run: |
+  #       for report in $(find ${{ steps.download-report.outputs.tempdir }} -name '*.xml');
+  #       do
+  #         echo "Procesing ${report}"
+  #       done
