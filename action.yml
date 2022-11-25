@@ -23,8 +23,7 @@ inputs:
     default: ${{ github.token }}
 runs:
   using: "node16"
-  main: "main.js"
-
+  main: "dist/index.js"
   # using: "composite"
   # steps:
   #   - name: Download JUnit Artifact

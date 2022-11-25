@@ -5,7 +5,6 @@ const core = require("@actions/core");
 const debug = core.debug;
 const setOutput = core.setOutput;
 const setFailed = core.setFailed;
-const sep = path.sep;
 
 const downloadReport = async ({
   github,
@@ -51,7 +50,7 @@ const downloadReport = async ({
         archive_format: "zip",
       });
 
-      directory = fs.mkdtempSync(path.join(os.tmpdir(), "junit-reports-"));
+      var directory = fs.mkdtempSync(path.join(os.tmpdir(), "junit-reports-"));
       debug("Temp directory : " + directory);
       var storedFile = path.join(directory, "junit-report.zip");
       debug("Storing file " + storedFile);
