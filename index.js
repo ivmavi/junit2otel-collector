@@ -1,10 +1,16 @@
 const github = require("@actions/github");
-const script = require("./script");
+const junitReport = require("./script");
 const core = require("@actions/core");
 
 const run = async () => {
   try {
-    const octokit = github.getOctokit(core.getInput("token"));
+    const TOKEN = core.getInput("token");
+    const octokit = github.getOctokit(TOKEN);
+
+    if (core.isDebug()) {
+      junitReport.checkToken(TOKEN, ["workflow"]);
+    }
+
     var report = {
       github: octokit,
       owner: core.getInput("owner"),
@@ -12,7 +18,7 @@ const run = async () => {
       workflowRunId: core.getInput("workflowRunId"),
       reportName: core.getInput("owner"),
     };
-    await script.downloadReport(report);
+    await junitReport.download(report);
   } catch (error) {
     core.setFailed(error.message);
   }
